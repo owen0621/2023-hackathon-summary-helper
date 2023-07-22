@@ -27,7 +27,7 @@ response = openai.ChatCompletion.create(
   messages=[
     {
       "role": "system",
-      "content": "為一個台灣律師對以下判決做200字摘要"
+      "content": "為一個台灣律師對以下判決做200字摘要，根據“大前提、小前提、結論”的結構論述"
     },
     {
       "role": "user",
