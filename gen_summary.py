@@ -1,42 +1,60 @@
-# -*- coding: UTF-8 -*-
 import os
 import openai
 from dotenv import load_dotenv
-import json 
+import json
+
 load_dotenv()
 
-with open("刑事_100,刑補,2_2011-11-21.json") as f:
-    data = json.load(f)
 
-judge = data["judgement"]
-judge = judge.replace(" ", "")
-judge = judge.replace("\r\n", "")
-judge = judge.replace("，", "")
-judge = judge.replace("：", "")
-judge = judge.replace("。", "")
-judge = judge.replace("、", "")
-judge = judge.replace("　　　　　　　", "")
-judge = judge.replace("　", "")
+def mark_remove(text):
+    judge = text
+    judge = judge.replace(" ", "")
+    judge = judge.replace("\r\n", "")
+    judge = judge.replace("，", "")
+    judge = judge.replace("：", "")
+    judge = judge.replace("。", "")
+    judge = judge.replace("、", "")
+    judge = judge.replace("　　　　　　　", "")
+    judge = judge.replace("　", "")
+    return judge
 
-# print(judge)
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+def get_summary(judgement):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
 
-response = openai.ChatCompletion.create(
-  model="gpt-3.5-turbo",
-  messages=[
-    {
-      "role": "system",
-      "content": "為一個台灣律師對以下判決做200字摘要，根據“大前提、小前提、結論”的結構論述"
-    },
-    {
-      "role": "user",
-      "content" : judge
-    }
-  ],
-  temperature=0
-#   max_tokens=1024
-)
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-16k",
+        messages=[
+            {
+                "role": "system",
+                "content": "為一個台灣律師對以下判決做400字摘要，根據“大前提、小前提、涵攝”的三段論法結構生成回答",
+            },
+            {"role": "user", "content": judgement},
+        ],
+        temperature=0,
+    )
+    completed_text = response.choices[0].message.content
+    return completed_text
 
-completed_text = response.choices[0].message.content
-print(completed_text)
+
+if __name__ == "__main__":
+    path = "judgement/0724"
+    dirs = list(map(lambda x: path + "/" + x, os.listdir(path)))
+    for dir in dirs:
+        files = list(map(lambda x: dir + "/" + x, os.listdir(dir)))
+        for file in files:
+            inf = open(file, "r", encoding="utf8")
+            data = json.load(inf)
+            inf.close()
+
+            if type(data["judgement"]) == list:
+                data["judgement"] = "".join(data["judgement"])
+
+            summary = get_summary(mark_remove(data["judgement"]))
+            data["summary"] = summary
+            print(data["summary"])
+
+            outf = open(file, "w", encoding="utf8")
+            json.dump(data, outf, ensure_ascii=False)
+            outf.close()
+            print("--------------------------------------------------")
