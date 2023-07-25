@@ -2,3 +2,4 @@ python-dotenv
 openai
 numpy
 pandas
+mysql-connector-python
