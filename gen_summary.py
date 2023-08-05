@@ -27,7 +27,7 @@ def get_summary(judgement):
         messages=[
             {
                 "role": "system",
-                "content": "為一個台灣律師對以下判決做400字摘要，根據“大前提、小前提、涵攝”的三段論法結構生成回答",
+                "content": "為一個台灣律師對以下判決的法院見解部分做50字摘要",
             },
             {"role": "user", "content": judgement},
         ],
@@ -40,21 +40,29 @@ def get_summary(judgement):
 if __name__ == "__main__":
     path = "judgement/0724"
     dirs = list(map(lambda x: path + "/" + x, os.listdir(path)))
+    count = 0
     for dir in dirs:
-        files = list(map(lambda x: dir + "/" + x, os.listdir(dir)))
-        for file in files:
-            inf = open(file, "r", encoding="utf8")
-            data = json.load(inf)
-            inf.close()
+        if count > 5:
+            break
+        count += 1
+        inf = open(dir, "r", encoding="utf8")
+        data = json.load(inf)
+        inf.close()
 
-            if type(data["judgement"]) == list:
-                data["judgement"] = "".join(data["judgement"])
+        if type(data["judgement"]) == list:
+            data["judgement"] = "".join(data["judgement"])
 
+        try:  # 使用 try，測試內容是否正確
             summary = get_summary(mark_remove(data["judgement"]))
-            data["summary"] = summary
-            print(data["summary"])
-
-            outf = open(file, "w", encoding="utf8")
-            json.dump(data, outf, ensure_ascii=False)
-            outf.close()
+            print("no")
+            print(data["no"])
+            print()
+            print("summary")
+            print(summary)
             print("--------------------------------------------------")
+        except:  # 如果 try 的內容發生錯誤，就執行 except 裡的內容
+            pass
+
+        # outf = open(file, "w", encoding="utf8")
+        # json.dump(data, outf, ensure_ascii=False)
+        # outf.close()
