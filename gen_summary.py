@@ -3,6 +3,8 @@ import openai
 from dotenv import load_dotenv
 import json
 
+from pathlib import Path
+
 load_dotenv()
 
 
@@ -38,10 +40,22 @@ def get_summary(judgement):
 
 
 if __name__ == "__main__":
-    path = "judgement/0724"
+    DATA_DIR_NAME = os.getenv('DATA_DIR_NAME')
+    path = f"judgement/{DATA_DIR_NAME}"
     dirs = list(map(lambda x: path + "/" + x, os.listdir(path)))
     count = 0
     for dir in dirs:
+        # Check if we have have this data's summary already.
+        filename = Path(dir).stem + '.txt'
+        result_dir = Path(f'./gpt_summarized_result/{DATA_DIR_NAME}/')
+        if not result_dir.exists():
+            result_dir.mkdir()
+        result_file = result_dir / filename
+        if result_file.exists():
+            # If we already have this data's summary, go to next directly.
+            # To save money! That's so important!!!
+            continue
+
         if count > 5:
             break
         count += 1
@@ -60,8 +74,15 @@ if __name__ == "__main__":
             print("summary")
             print(summary)
             print("--------------------------------------------------")
-        except:  # 如果 try 的內容發生錯誤，就執行 except 裡的內容
             pass
+        except Exception as e:  # 如果 try 的內容發生錯誤，就執行 except 裡的內容
+            raise e
+
+        # Save the summarized result.
+        with open(result_file, 'w', encoding='UTF-8') as file:
+            file.write(summary)
+
+    print('All the data (under "DATA_DIR_NAME") have already summarized.')
 
         # outf = open(file, "w", encoding="utf8")
         # json.dump(data, outf, ensure_ascii=False)
