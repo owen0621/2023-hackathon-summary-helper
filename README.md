@@ -12,4 +12,5 @@ Then run `gen_summary.py`!
 
 ## Easy Demo
 
-Open `./Lawsnote\ Prototype/demo.html` with google chrome
+1. Download the repository.
+2. Open `Lawsnote\ Prototype/demo.html` with google chrome.
