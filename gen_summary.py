@@ -21,7 +21,7 @@ def mark_remove(text):
     return judge
 
 
-def get_summary(judgement):
+def get_summary(judgement, content="為台灣司法人員對以下判決的法院見解部分做200字摘要"):
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
     response = openai.ChatCompletion.create(
@@ -29,7 +29,7 @@ def get_summary(judgement):
         messages=[
             {
                 "role": "system",
-                "content": "為一個台灣律師對以下判決的法院見解部分做50字摘要",
+                "content": content,
             },
             {"role": "user", "content": judgement},
         ],
@@ -40,14 +40,26 @@ def get_summary(judgement):
 
 
 if __name__ == "__main__":
-    DATA_DIR_NAME = os.getenv('DATA_DIR_NAME')
+    # judgement = ""
+    # judgement = mark_remove(judgement)
+    # size = len(judgement)
+    # hi = get_summary(judgement[0 : size // 2], "以下是一篇台灣法院的判決的其中一部分，提取出其中有關法院見解的部分")
+    # lo = get_summary(judgement[size // 2 : size], "以下是一篇台灣法院的判決的其中一部分，提取出其中有關法院見解的部分")
+    # print(hi)
+    # print("---------------------")
+    # print(lo)
+    # print("---------------------")
+    # print(get_summary(hi + lo, "以下是一篇台灣法院判決的法院見解部分，做一份200字摘要"))
+    # print(get_summary(judgement))
+
+    DATA_DIR_NAME = os.getenv("DATA_DIR_NAME")
     path = f"judgement/{DATA_DIR_NAME}"
     dirs = list(map(lambda x: path + "/" + x, os.listdir(path)))
     count = 0
     for dir in dirs:
         # Check if we have have this data's summary already.
-        filename = Path(dir).stem + '.txt'
-        result_dir = Path(f'./gpt_summarized_result/{DATA_DIR_NAME}/')
+        filename = Path(dir).stem + ".txt"
+        result_dir = Path(f"./gpt_summarized_result/{DATA_DIR_NAME}/")
         if not result_dir.exists():
             result_dir.mkdir()
         result_file = result_dir / filename
@@ -79,11 +91,7 @@ if __name__ == "__main__":
             raise e
 
         # Save the summarized result.
-        with open(result_file, 'w', encoding='UTF-8') as file:
+        with open(result_file, "w", encoding="UTF-8") as file:
             file.write(summary)
 
     print('All the data (under "DATA_DIR_NAME") have already summarized.')
-
-        # outf = open(file, "w", encoding="utf8")
-        # json.dump(data, outf, ensure_ascii=False)
-        # outf.close()
