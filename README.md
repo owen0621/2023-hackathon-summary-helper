@@ -14,3 +14,9 @@ Then run `gen_summary.py`!
 
 1. Download the repository.
 2. Open `Lawsnote\ Prototype/demo.html` with google chrome.
+   <img src="./picture/Screenshot 2023-08-11 at 10.28.39.png">
+   <img src="./picture/Screenshot 2023-08-11 at 10.28.53.png">
+   <img src="./picture/Screenshot 2023-08-11 at 10.29.49.png">
+   <img src="./picture/Screenshot 2023-08-11 at 10.30.08.png">
+   <img src="./picture/Screenshot 2023-08-11 at 10.30.38.png">
+   <img src="./picture/Screenshot 2023-08-11 at 10.45.45.png">
