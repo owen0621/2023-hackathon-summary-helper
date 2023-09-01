@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>prompt_test</title>
+</head>
+
+<body>
+    <h3>Input: </h3>
+    <textarea id="prompt" rows="10" cols="100" name="prompt">Enter the prompt:</textarea><br>
+    <textarea id="judgement" rows="40" cols="100" name="judgement">Enter judgement:</textarea><br>
+    <button id="submit">submit</button><br>
+    <h3>Summary: </h3>
+    <textarea id="output" rows="10" cols="100" name="output">Output:</textarea>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+        </script>
+    <script>
+        $(document).ready(function () {
+                // Get value on button click and show alert
+                $("#submit").click(function () {
+                    $("#submit").attr("disabled","true");
+                    get_summary()
+                });
+            });
+
+        function mark_remove(text) {
+            let judge = text;
+            judge = judge.replace(/ /g, "");
+            judge = judge.replace(/\r\n/g, "");
+            judge = judge.replace(/，/g, "");
+            judge = judge.replace(/：/g, "");
+            judge = judge.replace(/。/g, "");
+            judge = judge.replace(/、/g, "");
+            judge = judge.replace(/　+/g, "");
+            judge = judge.replace(/　/g, "");
+            return judge;
+        }
+        function get_summary() {
+            const apiKey = '<api-key>';
+            const endpoint = 'https://api.openai.com/v1/chat/completions'; // Replace with the actual API endpoint
+
+            var user_prompt = $("#judgement").val();
+            var sys_prompt = $("#prompt").val();
+            user_prompt = mark_remove(user_prompt)
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    "model": "gpt-3.5-turbo-16k",
+                    "messages": [{ "role": "system", "content": sys_prompt },
+                    { "role": "user", "content": user_prompt }],
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const generatedText = data.choices[0].message.content;
+                    console.log(generatedText);
+                    $("#output").text(generatedText)
+                    $("#submit").attr("disabled","false");
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+
+</html>
