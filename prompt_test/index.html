@@ -7,11 +7,15 @@
 </head>
 
 <body>
-    <h3>Input: </h3>
+    <h3>Input</h3>
+    <p>Api key:</p>
+    <input id="key" name="key" size="100" placeholder="Enter the openai api key"><br>
+    <p>Prompt:</p>
     <textarea id="prompt" rows="10" cols="100" name="prompt">Enter the prompt:</textarea><br>
+    <p>Judgement:</p>
     <textarea id="judgement" rows="40" cols="100" name="judgement">Enter judgement:</textarea><br>
     <button id="submit">submit</button><br>
-    <h3>Summary: </h3>
+    <h3>Summary</h3>
     <textarea id="output" rows="10" cols="100" name="output">Output:</textarea>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -39,12 +43,12 @@
             return judge;
         }
         function get_summary() {
-            const apiKey = '<api-key>';
             const endpoint = 'https://api.openai.com/v1/chat/completions'; // Replace with the actual API endpoint
-
+            const apiKey = $("#key").val();
             var user_prompt = $("#judgement").val();
             var sys_prompt = $("#prompt").val();
             user_prompt = mark_remove(user_prompt)
+
             fetch(endpoint, {
                 method: 'POST',
                 headers: {

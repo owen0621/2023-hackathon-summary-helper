@@ -24,14 +24,13 @@ Then run `gen_summary.py`!
 ## Prompt Test
 
 1. Download the repository.
-2. Open `prompt_test/index.html` with visual studio code.
-3. Replace the token at line 42 with you own.
-4. Open `prompt_test/index.html` with google chrome.
+2. Open `prompt_test/index.html` with google chrome.
+3. Enter api key, prompt and judgement.
+4. Press the submit button.
+5. Wait for the summary to pop out.
    <img src="./picture/Screenshot 2023-09-01 at 18.18.31.png">
    <img src="./picture/Screenshot 2023-09-01 at 18.18.50.png">
-   <img src="./picture/Screenshot 2023-09-01 at 18.19.51.png">
-   <img src="./picture/Screenshot 2023-09-01 at 18.24.38.png">
    <img src="./picture/Screenshot 2023-09-01 at 18.27.26.png">
-   <img src="./picture/Screenshot 2023-09-01 at 18.21.42.png">
-   <img src="./picture/Screenshot 2023-09-01 at 18.21.55.png">
-   <img src="./picture/Screenshot 2023-09-01 at 18.22.15.png">
+   <img src="./picture/Screenshot 2023-09-03 at 16.17.51.png">
+   <img src="./picture/Screenshot 2023-09-03 at 16.18.16.png">
+   <img src="./picture/Screenshot 2023-09-03 at 16.18.42.png">
